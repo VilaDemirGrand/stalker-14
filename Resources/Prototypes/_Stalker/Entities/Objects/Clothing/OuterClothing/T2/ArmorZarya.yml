@@ -150,25 +150,29 @@
   parent: ClothingOuterArmorZaryaHunter
   id: STClothingOuterArmorRassvetSera
   name: комбинезон «Рассвет»
-  suffix: ST, T1, PVE
-  description: комбинезон «Рассвет», используемый группировкой «Серафимы» для выполнения тактических задач с повышенной защитой от агрессивной фауны.
+  suffix: ST, T2, PVE
+  description: комбинезон «Рассвет», используемый группировкой «Серафимы» для выполнения тактических задач с повышенной защитой от мутантов.
   components:
-    - type: Sprite
-      sprite: _Stalker/Clothing/OuterClothing/_Sera/rassvet.rsi
-    - type: Clothing
-      sprite: _Stalker/Clothing/OuterClothing/_Sera/rassvet.rsi
-    - type: ToggleableClothing
-      clothingPrototype: ClothingHeadCapoSera
-      slot: head
-    - type: Armor
-      armorClass: 1
-      armorLevels:
-        nonPvPPhysical: 3
-        piercing: -2
-        radiation: -2
-        heat: -1
-        psy: -1
-        shock: -1
+  - type: STWeight
+    self: 5
+  - type: Sprite
+    sprite: _Stalker/Clothing/OuterClothing/_Sera/rassvet.rsi
+  - type: Clothing
+    sprite: _Stalker/Clothing/OuterClothing/_Sera/rassvet.rsi
+  - type: Armor
+    armorClass: 1
+    modifiers:
+      flatReductions:
+        Blunt: 4
+        Slash: 4
+      coefficients:
+        Blunt: 0.40
+        Slash: 0.30
+        Piercing: 0.9
+        Heat: 0.95
+        Caustic: 0.95
+  - type: ExplosionResistance
+    damageCoefficient: 0.90
 
 - type: entity
   parent: STClothingHeadHatBase
@@ -381,16 +385,3 @@
 
 
 #СКИНЫ
-
-- type: entity
-  parent: STClothingOuterArmorZaryaBase
-  id: ClothingOuterArmorZaryaSeraRuined
-  name: комбинезон «Заря»
-  description: Кустарно перекрашенная и убитая в хлам «Заря»
-  components:
-  - type: Sprite
-    sprite: _Stalker/Objects/Clothing/outerClothing/zarya_ruined.rsi
-  - type: Clothing
-    sprite: _Stalker/Objects/Clothing/outerClothing/zarya_ruined.rsi
-  - type: ToggleableClothing
-    clothingPrototype: ClothingHeadHelmetSeraRuined
