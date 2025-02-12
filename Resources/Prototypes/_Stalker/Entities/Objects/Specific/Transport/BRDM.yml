@@ -1,0 +1,50 @@
+- type: entity
+  name: БРДМ-2
+  parent: STBaseCar
+  id: STBRDM2
+  components:
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.7,0.5,0.8"
+        density: 155
+        mask:
+        - MobMask
+        layer:
+        - MachineLayer
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 5000
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:ChangeConstructionNodeBehavior
+        node: start
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: Mech
+    mechToPilotDamageMultiplier: 0.01
+    airtight: true
+    baseState: BRDM
+  - type: Sprite
+    sprite: _Stalker/Objects/Decoration/Transport/BRDM.rsi
+    layers:
+    - map: [ "enum.MechVisualLayers.Base" ]
+      state: BRDM
+
+- type: entity
+  id: STBRDMGun
+  parent: BaseMechEquipment
+  name: GUNNNNNNN
+  components:
+    - type: Sprite
+      state: mecha_clamp
+    
+
+
+

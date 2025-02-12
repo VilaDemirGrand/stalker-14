@@ -1,0 +1,112 @@
+- type: entity
+  name: Нива
+  parent: [ BaseStructureDynamic , MobAnomalyTarget ]
+  id: STBaseCar
+  components:
+  - type: DoAfter
+  - type: UserInterface
+    interfaces:
+      enum.MechUiKey.Key:
+        type: MechBoundUserInterface
+  - type: Puller
+    needsHands: false
+  - type: InputMover
+  - type: InteractionOutline
+  - type: Tag
+    tags:
+    - DoorBumpOpener
+    - FootstepSound
+  - type: Physics
+  - type: Clickable
+  - type: WiresPanel
+  - type: Fixtures
+    fixtures:
+      fix1:
+        shape:
+          !type:PhysShapeAabb
+          bounds: "-0.5,-0.7,0.5,0.8"
+        density: 155
+        mask:
+        - MobMask
+        layer:
+        - MachineLayer
+  - type: Appearance
+  - type: ContainerContainer
+    containers:
+      mech-pilot-slot: !type:ContainerSlot
+      mech-equipment-container: !type:Container
+      mech-battery-slot: !type:ContainerSlot
+  - type: Damageable
+    damageContainer: Car
+    damageModifierSet: Niva
+  - type: Destructible
+    thresholds:
+    - trigger:
+        !type:DamageTrigger
+        damage: 10
+      behaviors:
+      - !type:PlaySoundBehavior
+        sound:
+          collection: MetalBreak
+      - !type:ChangeConstructionNodeBehavior
+        node: start
+      - !type:DoActsBehavior
+        acts: ["Destruction"]
+  - type: Sprite
+    drawdepth: Mobs
+    sprite: _Stalker/Objects/Decoration/Transport/old_NIVA.rsi
+    scale: 0.8, 0.8
+    layers:
+    - map: [ "enum.MechVisualLayers.Base" ]
+      state: niva-old
+  - type: MovementSpeedModifier
+    weightlessModifier: 1
+    acceleration: 3
+    friction: 1.5
+    frictionNoInput: 6
+    baseWalkSpeed: 6
+    baseSprintSpeed: 15
+  - type: ContainerFill
+    containers:
+      mech-battery-slot:
+      - PowerCellHigh
+  - type: Mech
+    mechToPilotDamageMultiplier: 0.05
+    airtight: true
+    baseState: niva-old
+  - type: ItemSlots
+  - type: Transform
+  - type: EntityStorage
+    capacity: 5
+    airtight: false
+  - type: Lock
+  - type: AccessReader
+    access: [["Project"]]
+  - type: ApproachEmitter
+    range: 20
+    minRange: 15
+    useMinRange: true
+  - type: Stagger
+  - type: ZoneAnomalyActivator
+  - type: Reactive
+    groups:
+      Flammable: [Touch]
+      Extinguish: [Touch]
+      Acidic: [Touch, Ingestion]
+  - type: DamageOnHighSpeedImpact
+    damage:
+      types:
+        Blunt: 15
+    soundHit:
+      path: /Audio/Effects/hit_kick.ogg    
+
+
+
+- type: damageContainer
+  id: Car
+  supportedGroups:
+    - Brute
+    - Burn
+  supportedTypes:
+    - Caustic
+    - Compression
