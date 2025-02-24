@@ -1,11 +1,11 @@
-﻿using Content.Shared._Stalker.Lay;
+using Robust.Shared.GameStates;
 
-namespace Content.Server._Stalker.Lay;
+namespace Content.Shared._Stalker.Lay;
 
-[RegisterComponent]
+[RegisterComponent, NetworkedComponent, AutoGenerateComponentState]
 public sealed partial class STLayComponent : Component
 {
-    [DataField]
+    [DataField, AutoNetworkedField]
     public STLayState State;
 
     [DataField]

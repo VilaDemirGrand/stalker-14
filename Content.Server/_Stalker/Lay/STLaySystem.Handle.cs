@@ -1,6 +1,7 @@
 using Content.Shared.Input;
 using Robust.Shared.Input.Binding;
 using Robust.Shared.Player;
+using Content.Shared._Stalker.Lay;
 
 namespace Content.Server._Stalker.Lay;
 

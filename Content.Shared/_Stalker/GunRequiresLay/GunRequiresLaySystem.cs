@@ -1,12 +1,13 @@
 using Content.Shared.Examine;
 using Content.Shared.Popups;
 using Content.Shared.Weapons.Ranged.Events;
-using Content.Server._Stalker.Lay;
+using Content.Shared._Stalker.Lay;
 
-namespace Content.Server._Stalker.GunRequiresLay;
+namespace Content.Shared._Stalker.GunRequiresLay;
 public sealed class GunRequiresLaySystem : EntitySystem
 {
     [Dependency] private readonly SharedPopupSystem _popupSystem = default!;
+    [Dependency] private readonly IGameTiming _timing = default!;
 
     public override void Initialize()
     {
@@ -20,12 +21,18 @@ public sealed class GunRequiresLaySystem : EntitySystem
 
     private void OnShootAttempt(EntityUid uid, GunRequiresLayComponent component, ref ShotAttemptedEvent args)
     {
-        if (TryComp<STLayComponent>(args.User, out var comp) && comp.State == Shared._Stalker.Lay.STLayState.Stand)
+        if (TryComp<STLayComponent>(args.User, out var comp) && comp.State == STLayState.Stand)
         {
 
             args.Cancel();
-            var message = Loc.GetString("gun-requires-lay-cancel");
-            _popupSystem.PopupClient(message, args.Used, args.User);
+
+            var time = _timing.CurTime;
+            if (time > component.LastPopup + component.PopupCooldown)
+            {
+                component.LastPopup = time;
+                var message = Loc.GetString("gun-requires-lay-cancel");
+                _popupSystem.PopupClient(message, args.Used, args.User);
+            }
         }
     }
 
