@@ -1,16 +1,16 @@
 - type: entity
   name: СКС
   suffix: ST
-  parent: STBaseWeaponSniper
+  parent: STBaseWeaponRifle
   id: STWeaponRifleSKS
   description: Самозарядный карабин Симонова под 7.62х39 с базовым неотъёмным магазином на 10 патрон. Мощный калибр за небольшие деньги со своими ограничениями.
   components:
   - type: Clothing
-    sprite: _Stalker/Objects/Weapons/Guns/Snipers/sks.rsi
+    sprite: _Stalker/Objects/Weapons/Guns/Rifles/sks.rsi
   - type: STWeight
     self: 3.75
   - type: Item
-    sprite: _Stalker/Objects/Weapons/Guns/Snipers/sks.rsi
+    sprite: _Stalker/Objects/Weapons/Guns/Rifles/sks.rsi
   - type: BallisticAmmoProvider
     capacity: 10
     proto: Cartridge739PC
@@ -18,7 +18,7 @@
       tags:
       - Cartridge739
   - type: Sprite
-    sprite: _Stalker/Objects/Weapons/Guns/Snipers/sks.rsi
+    sprite: _Stalker/Objects/Weapons/Guns/Rifles/sks.rsi
   - type: Gun
     soundGunshot:
       path: /Audio/_Stalker/Effects/Guns/sks_shoot.ogg

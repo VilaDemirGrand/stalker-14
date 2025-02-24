@@ -3,20 +3,20 @@
 - type: entity
   name: ВСС-Винторез
   suffix: ST
-  parent: STBaseWeaponSniper
+  parent: STBaseWeaponRifle
   id: STWeaponRifleVSS
   description: Винтовка Снайперская Специальная под редкий и убойный калибр 9x39. Оснащён оптикой среднего радиуса.
   components:
     - type: Clothing
-      sprite: _Stalker/Objects/Weapons/Guns/Snipers/vss.rsi
+      sprite: _Stalker/Objects/Weapons/Guns/Rifles/vss.rsi
       equipDelay: 3
     - type: Item
-      sprite: _Stalker/Objects/Weapons/Guns/Snipers/vss.rsi
+      sprite: _Stalker/Objects/Weapons/Guns/Rifles/vss.rsi
       size: Large
       shape:
         - 0,0,6,1
     - type: Sprite
-      sprite: _Stalker/Objects/Weapons/Guns/Snipers/vss.rsi
+      sprite: _Stalker/Objects/Weapons/Guns/Rifles/vss.rsi
       layers:
         - state: base
           map: ["enum.GunVisualLayers.Base"]
@@ -54,13 +54,13 @@
           priority: 3
           whitelist:
             tags:
-              - STWeaponModuleSniperSight
+              - STWeaponModuleRifleScopeRu
         gun_module_muzzle:
           name: Muzzle
           priority: 2
           whitelist:
             tags:
-              - STWeaponModuleSniperSilencer
+              - STWeaponModuleRifleSilencerRu
         gun_chamber:
           name: Chamber
           startingItem:
