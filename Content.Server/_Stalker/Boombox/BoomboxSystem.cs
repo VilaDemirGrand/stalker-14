@@ -1,5 +1,4 @@
 using System.Linq;
-using Content.Server._Stalker.Boombox.Cassetes;
 using Content.Shared.Containers.ItemSlots;
 using Content.Shared.Interaction;
 using Robust.Server.Audio;
@@ -7,10 +6,11 @@ using Robust.Shared.Audio;
 using Content.Shared.Verbs;
 using Robust.Shared.Timing;
 using Robust.Shared.Utility;
+using Content.Shared._Stalker.Boombox;
 
 namespace Content.Server._Stalker.Boombox;
 
-public sealed class BoomboxSystem : EntitySystem
+public sealed partial class BoomboxSystem : EntitySystem
 {
     [Dependency] private readonly AudioSystem _audio = default!;
     [Dependency] private readonly IGameTiming _timing = default!;
@@ -38,7 +38,7 @@ public sealed class BoomboxSystem : EntitySystem
                 continue;
 
             var cassete = itemSlots.Slots.First().Value.Item;
-            if (!TryComp<CasseteComponent>(cassete, out var casseteComponent))
+            if (!TryComp<CassetteComponent>(cassete, out var casseteComponent))
             {
                 QueueDel(component.CurrentPlaying.Value.Item1);
                 component.CurrentPlaying = null;
@@ -82,7 +82,7 @@ public sealed class BoomboxSystem : EntitySystem
             return;
 
         var cassete = itemSlots.Slots.First().Value.Item;
-        if (!TryComp<CasseteComponent>(cassete, out var casseteComponent))
+        if (!TryComp<CassetteComponent>(cassete, out var casseteComponent))
             return;
 
         if (component.CurrentPlaying != null)
