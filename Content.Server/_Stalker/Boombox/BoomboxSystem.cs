@@ -38,7 +38,7 @@ public sealed partial class BoomboxSystem : EntitySystem
                 continue;
 
             var cassete = itemSlots.Slots.First().Value.Item;
-            if (!TryComp<CassetteComponent>(cassete, out var casseteComponent))
+            if (!TryComp<CasseteComponent>(cassete, out var casseteComponent))
             {
                 QueueDel(component.CurrentPlaying.Value.Item1);
                 component.CurrentPlaying = null;
@@ -82,7 +82,7 @@ public sealed partial class BoomboxSystem : EntitySystem
             return;
 
         var cassete = itemSlots.Slots.First().Value.Item;
-        if (!TryComp<CassetteComponent>(cassete, out var casseteComponent))
+        if (!TryComp<CasseteComponent>(cassete, out var casseteComponent))
             return;
 
         if (component.CurrentPlaying != null)
