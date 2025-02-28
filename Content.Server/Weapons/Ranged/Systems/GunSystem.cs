@@ -22,7 +22,19 @@ using Robust.Shared.Player;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Utility;
 using Robust.Shared.Containers;
-
+using Content.Server.Administration.Logs;
+using Content.Server.Effects;
+using Content.Server.Weapons.Ranged.Systems;
+using Content.Shared.Armor;
+using Content.Shared.Camera;
+using Content.Shared.Damage;
+using Content.Shared.Damage.Prototypes;
+using Content.Shared.Database;
+using Content.Shared.Inventory;
+using Content.Shared.Projectiles;
+using Robust.Shared.Physics.Events;
+using Robust.Shared.Player;
+using Robust.Shared.Prototypes;
 namespace Content.Server.Weapons.Ranged.Systems;
 
 public sealed partial class GunSystem : SharedGunSystem
@@ -35,6 +47,8 @@ public sealed partial class GunSystem : SharedGunSystem
     [Dependency] private readonly SharedTransformSystem _transform = default!;
     [Dependency] private readonly StaminaSystem _stamina = default!;
     [Dependency] private readonly SharedContainerSystem _container = default!;
+    [Dependency] private readonly InventorySystem _inventory = default!; // Stalker-Changes
+    [Dependency] private readonly IPrototypeManager _prototype = default!; // Stalker-Changes
 
     private const float DamagePitchVariation = 0.05f;
 
@@ -111,9 +125,127 @@ public sealed partial class GunSystem : SharedGunSystem
                 case CartridgeAmmoComponent cartridge:
                     if (!cartridge.Spent)
                     {
-                        var uid = Spawn(cartridge.Prototype, fromEnt);
-                        CreateAndFireProjectiles(uid, cartridge);
+                        // stalker-changes-start
+                        if (!cartridge.Hitscan)
+                        {
+                            var uid = Spawn(cartridge.Prototype, fromEnt);
+                            CreateAndFireProjectiles(uid, cartridge);
 
+                        } else
+                        {
+                            EntityUid? lastHit2 = null;
+
+                            var from2 = fromMap;
+                            // can't use map coords above because funny FireEffects
+                            var fromEffect2 = fromCoordinates;
+                            var dir2 = mapDirection.Normalized();
+
+                            //in the situation when user == null, means that the cannon fires on its own (via signals). And we need the gun to not fire by itself in this case
+                            var lastUser2 = user ?? gunUid;
+
+                            if (cartridge.Reflective != ReflectType.None)
+                            {
+                                for (var reflectAttempt = 0; reflectAttempt < 3; reflectAttempt++)
+                                {
+                                    var ray = new CollisionRay(from2.Position, dir2, cartridge.CollisionMask);
+                                    var rayCastResults =
+                                        Physics.IntersectRay(from2.MapId, ray, cartridge.MaxLength, lastUser2, false).ToList();
+                                    if (!rayCastResults.Any())
+                                        break;
+
+                                    var result = rayCastResults[0];
+
+                                    // Check if laser is shot from in a container
+                                    if (!_container.IsEntityOrParentInContainer(lastUser2))
+                                    {
+                                        // Checks if the laser should pass over unless targeted by its user
+                                        foreach (var collide in rayCastResults)
+                                        {
+                                            if (collide.HitEntity != gun.Target &&
+                                                CompOrNull<RequireProjectileTargetComponent>(collide.HitEntity)?.Active == true)
+                                            {
+                                                continue;
+                                            }
+
+                                            result = collide;
+                                            break;
+                                        }
+                                    }
+
+                                    var hit = result.HitEntity;
+                                    lastHit2 = hit;
+
+                               //     FireEffects(fromEffect2, result.Distance, dir2.Normalized().ToAngle(), cartridge.HitscanPrototype, hit);
+
+                                    var ev = new HitScanReflectAttemptEvent(user, gunUid, cartridge.Reflective, dir2, false);
+                                    RaiseLocalEvent(hit, ref ev);
+
+                                    if (!ev.Reflected)
+                                        break;
+
+                                    fromEffect2 = Transform(hit).Coordinates;
+                                    from2 = fromEffect2.ToMap(EntityManager, _transform);
+                                    dir2 = ev.Direction;
+                                    lastUser2 = hit;
+                                }
+                            }
+
+                            if (lastHit2 != null)
+                            {
+                                var hitEntity = lastHit2.Value;
+                                if (cartridge.StaminaDamage > 0f)
+                                    _stamina.TakeStaminaDamage(hitEntity, cartridge.StaminaDamage, source: user);
+
+                                var dmg = cartridge.Damage;
+
+                                var hitName = ToPrettyString(hitEntity);
+
+                                List<EntityUid> ignore = new();
+                                string[] slots = {"outerClothing","head","cloak","eyes","ears","mask","jumpsuit","neck","back","belt","gloves","shoes","id","legs","torso" };
+
+                                foreach (var slot in slots)
+                                {
+                                    if (_inventory.TryGetSlotEntity(hitEntity, slot, out var entity) && TryComp<ArmorComponent>(entity, out var armorComp) && armorComp.ArmorClass.HasValue)
+                                        if (cartridge.ProjectileClass >= armorComp.ArmorClass.Value)
+                                            ignore.Add(entity.Value);
+                                }
+
+                                if (dmg != null)
+                                    dmg = Damageable.TryChangeDamage(hitEntity, dmg, origin: user, ignoreResistors: ignore);
+
+                                if (dmg != null)
+                                {
+                                    if (!Deleted(hitEntity))
+                                    {
+                                        if (dmg.AnyPositive())
+                                        {
+                                            _color.RaiseEffect(Color.Red, new List<EntityUid>() { hitEntity }, Filter.Pvs(hitEntity, entityManager: EntityManager));
+                                        }
+
+                                        // TODO get fallback position for playing hit sound.
+                                        PlayImpactSound(hitEntity, dmg, cartridge.Sound, cartridge.ForceSound);
+                                    }
+
+                                    if (user != null)
+                                    {
+                                        Logs.Add(LogType.HitScanHit,
+                                            $"{ToPrettyString(user.Value):user} hit {hitName:target} using hitscan and dealt {dmg.GetTotal():damage} damage");
+                                    }
+                                    else
+                                    {
+                                        Logs.Add(LogType.HitScanHit,
+                                            $"{hitName:target} hit by hitscan dealing {dmg.GetTotal():damage} damage");
+                                    }
+                                }
+                            }
+                            else
+                            {
+                              //  FireEffects(fromEffect2, cartridge.MaxLength, dir2.ToAngle(), cartridge.HitscanPrototype);
+                            }
+
+                            Audio.PlayPredicted(gun.SoundGunshotModified, gunUid, user);
+                        }
+                        // stalker-changes-end
                         RaiseLocalEvent(ent!.Value, new AmmoShotEvent()
                         {
                             FiredProjectiles = shotProjectiles,

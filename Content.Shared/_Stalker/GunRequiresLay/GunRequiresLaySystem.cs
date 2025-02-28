@@ -2,6 +2,7 @@ using Content.Shared.Examine;
 using Content.Shared.Popups;
 using Content.Shared.Weapons.Ranged.Events;
 using Content.Shared._Stalker.Lay;
+using Robust.Shared.Timing;
 
 namespace Content.Shared._Stalker.GunRequiresLay;
 public sealed class GunRequiresLaySystem : EntitySystem

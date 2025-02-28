@@ -2,6 +2,12 @@ using Robust.Shared.Audio;
 using Robust.Shared.GameStates;
 using Robust.Shared.Prototypes;
 using Robust.Shared.Serialization.TypeSerializers.Implementations.Custom.Prototype;
+using Content.Shared.Damage;
+using Content.Shared.Physics;
+using Content.Shared.Weapons.Reflect;
+using Robust.Shared.Audio;
+using Robust.Shared.Prototypes;
+using Robust.Shared.Utility;
 
 namespace Content.Shared.Weapons.Ranged.Components;
 
@@ -29,6 +35,40 @@ public sealed partial class CartridgeAmmoComponent : AmmoComponent
     [ViewVariables(VVAccess.ReadWrite), DataField("spent")]
     [AutoNetworkedField]
     public bool Spent = false;
+
+    // stalker-changes-start
+
+    [ViewVariables(VVAccess.ReadWrite), DataField("hitscan")]
+    [AutoNetworkedField]
+    public bool Hitscan = false;
+
+    [DataField("projectileClass", false, 1, false, false, null)]
+    public int? ProjectileClass;
+
+
+    // this shit is weird idk how to do it another way
+
+    [ViewVariables(VVAccess.ReadWrite), DataField("staminaDamage")]
+    public float StaminaDamage;
+
+    [ViewVariables(VVAccess.ReadWrite), DataField("damage")]
+    public DamageSpecifier? Damage;
+
+    [DataField("collisionMask")]
+    public int CollisionMask = (int)CollisionGroup.Opaque;
+
+    [DataField("reflective")] public ReflectType Reflective = ReflectType.NonEnergy;
+
+    [DataField("sound")]
+    public SoundSpecifier? Sound;
+
+    [ViewVariables(VVAccess.ReadWrite), DataField("forceSound")]
+    public bool ForceSound;
+
+    [DataField("maxLength")]
+    public float MaxLength = 45f;
+
+    // stalker-changes-end
 
     /// <summary>
     /// Caseless ammunition.
