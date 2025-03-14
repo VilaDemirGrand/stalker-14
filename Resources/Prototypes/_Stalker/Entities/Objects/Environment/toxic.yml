@@ -110,6 +110,7 @@
   description: looks delicios. Try to make soup from it.
   suffix: acid, poison
   components:
+    - type: Clickable
     - type: Sprite
       sprite: _Stalker/Objects/Environment/poison_shrooms.rsi
       state: base
@@ -126,9 +127,9 @@
     - BaseStructureStalkerDynamic
   id: STToxicBarrelBase
   abstract: true
-  name: токсичная бочка
+  name: toxic barrel
   suffix: acid, explosion
-  description: после всех этих лет там все еще есть какая-то зеленая жидкость.
+  description: After all this years there is still some green liquid out there
   placement:
     mode: PlaceFree
   components:
