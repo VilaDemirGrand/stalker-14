@@ -93,3 +93,15 @@
     sprite: _Stalker/Structures/Walls/prison.rsi
   - type: Damageable
     damageModifierSet: Metallic
+
+- type: entity
+  parent: STBaseWall
+  id: STWallSwear
+  name: swear wall
+  components:
+  - type: Sprite
+    sprite: _Stalker/Structures/Walls/sewer.rsi
+  - type: Icon
+    sprite: _Stalker/Structures/Walls/sewer.rsi
+  - type: Damageable
+    damageModifierSet: Metallic

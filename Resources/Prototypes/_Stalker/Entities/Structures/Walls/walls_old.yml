@@ -40,26 +40,6 @@
 
 - type: entity
   parent: BaseWall
-  id: WallSewerFallout
-  name: Канализационная стена
-  suffix: ST, Mapping, wall, KMIN
-  components:
-  - type: Tag
-    tags:
-      - Wall
-  - type: Sprite
-    sprite: _Stalker/Structures/Walls/sewer.rsi
-  - type: Icon
-    sprite: _Stalker/Structures/Walls/sewer.rsi
-  - type: Damageable
-    damageContainer: Inorganic
-    damageModifierSet: Metallic
-  - type: IconSmooth
-    key: walls
-    base: sewer
-
-- type: entity
-  parent: BaseWall
   id: WallReinfMetalFallout
   name: Бронированная стена
   suffix: ST, Mapping, wall, KMIN

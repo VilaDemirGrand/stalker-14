@@ -17,6 +17,7 @@ WallDungeonFallout: STWallBunkerReinforced
 WallMetalFallout: STWallSteel
 WallConcreteFallout: STWallConcrete
 WallPrisonFallout: STWallPrison
+WallSewerFallout: STWallSwear
 #26.02.2025 - stalker14 project removed
 MetalAltDoorFalloutPoliceOfficerClosed : null
 StalkerDublicateProject : null
