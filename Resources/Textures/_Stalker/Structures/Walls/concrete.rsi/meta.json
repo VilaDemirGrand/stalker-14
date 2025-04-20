@@ -1,45 +1,45 @@
 {
   "version": 1,
-  "license": "CC-BY-SA-3.0",
-  "copyright": "Taken from https://github.com/tgstation/tgstation/commit/f743754ec3ef446c8172388431effa73aeddb7ff#diff-b429dd7fccbca60d740d4887c1077a178abf1efffe57e7ae2a0b607c8a9e2202 and modified.",
+  "license": "stalker14 license",
+  "copyright": "by swecher exclusively for Stalker14",
   "size": {
     "x": 32,
-    "y": 32
+    "y": 64
   },
   "states": [
 	  {
       "name": "full"
-    }, 
+    },
 	  {
-      "name": "concrete0",
+      "name": "state0",
 	    "directions": 4
     },
 	  {
-      "name": "concrete1",
+      "name": "state1",
 	    "directions": 4
     },
 	  {
-      "name": "concrete2",
+      "name": "state2",
 	    "directions": 4
     },
 	  {
-      "name": "concrete3",
+      "name": "state3",
 	    "directions": 4
     },
 	  {
-      "name": "concrete4",
+      "name": "state4",
 	    "directions": 4
     },
 	  {
-      "name": "concrete5",
+      "name": "state5",
 	    "directions": 4
     },
 	  {
-      "name": "concrete6",
+      "name": "state6",
 	    "directions": 4
     },
 	  {
-      "name": "concrete7",
+      "name": "state7",
 	    "directions": 4
     }
   ]
